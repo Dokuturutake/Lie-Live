@@ -2,7 +2,7 @@ import { paraglide } from '@inlang/paraglide-sveltekit/vite';
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	plugins: [
 		sveltekit(),
 		paraglide({
@@ -12,6 +12,13 @@ export default defineConfig({
 	],
 
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		exclude: ['src/**/*.e2e.spec.ts', 'e2e/**/*'],
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: './src/setupTests.ts'
+	},
+	resolve: {
+		conditions: mode === 'test' ? ['browser'] : []
 	}
-});
+}));
